@@ -1,0 +1,64 @@
+﻿@page "/fear-and-greed"
+@using CoinMarketCapWebApp.Infrastructure.Services
+@using static CoinMarketCapWebApp.Infrastructure.Models.CryptoApiModels
+
+
+
+
+@if (fearAndGreedData != null)
+{
+    <div class="p-6 rounded-lg shadow-lg bg-white text-center">
+        <h2 class="text-xl font-bold">Fear & Greed Index</h2>
+        <p class="@($"text-4xl font-extrabold {StatusColor}")">@fearAndGreedData.Value</p>
+
+        <p class="text-lg">@fearAndGreedData.value_classification</p>
+        <p class="text-sm text-gray-500">Last Update: @fearAndGreedData.update_time</p>
+    </div>
+}
+else
+{
+    <p>Loading...</p>
+}
+
+
+@code {
+    [Inject]
+    CoinMarketCapService coinMarketCapService { get; set; }
+    private FearAndGreedLatest? fearAndGreedData;
+    private string StatusColor => GetStatusColor();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        try
+        {
+            var response = await coinMarketCapService.GetFearAndGreedLatests();
+            if (response != null)
+            {
+                fearAndGreedData = response; // Sadece tek bir nesne döndüğünü varsayıyoruz
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Hata: {ex.Message}");
+        }
+    }
+
+    private string GetStatusColor()
+    {
+        if (fearAndGreedData == null) return "gray";
+
+        return fearAndGreedData.Value switch
+        {
+            <= 20 => "text-red-600",      // Extreme Fear
+            <= 40 => "text-orange-400",   // Fear
+            <= 60 => "text-yellow-400",   // Neutral
+            <= 80 => "text-green-400",    // Greed
+            _ => "text-green-600"         // Extreme Greed
+        };
+    }
+}

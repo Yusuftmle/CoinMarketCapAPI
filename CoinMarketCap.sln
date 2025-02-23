@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{3D8DE77E-2295-4D60-BC43-DCDFB0C9BEB6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoinMarketCapWebApp", "CoinMarketCapClient\Client\CoinMarketCapWebApp\CoinMarketCapWebApp.csproj", "{D6363C46-1422-4D1A-974D-FB6CB1CECAAA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D6363C46-1422-4D1A-974D-FB6CB1CECAAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6363C46-1422-4D1A-974D-FB6CB1CECAAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6363C46-1422-4D1A-974D-FB6CB1CECAAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6363C46-1422-4D1A-974D-FB6CB1CECAAA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D6363C46-1422-4D1A-974D-FB6CB1CECAAA} = {3D8DE77E-2295-4D60-BC43-DCDFB0C9BEB6}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4E99CA75-73AA-4475-BA82-E198D6AF7892}
+	EndGlobalSection
+EndGlobal

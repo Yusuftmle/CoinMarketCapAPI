@@ -1,0 +1,52 @@
+﻿@page "/crypto-list"
+
+@using CoinMarketCapWebApp.Infrastructure.Services
+@using static CoinMarketCapWebApp.Infrastructure.Models.CryptoApiModels
+@if (cryptos != null && cryptos.Count > 0)
+{
+    <table class="table-auto w-full">
+        <thead>
+            <tr>
+                <th class="px-4 py-2">Rank</th>
+                <th class="px-4 py-2">Coin</th>
+                <th class="px-4 py-2">Price (USD)</th>
+                <th class="px-4 py-2">24h Change</th>
+                <th class="px-4 py-2">Market Cap</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var crypto in cryptos)
+            {
+              
+     
+                <tr>
+                    <td class="border px-4 py-2">@crypto.cmc_rank</td>
+                    <td class="border px-4 py-2">@crypto.Name (@crypto.Symbol.)</td>
+                    <td class="border px-4 py-2">@crypto.Quote?["USD"].Price.ToString("C")</td>
+                    <td class="border px-4 py-2 @(crypto.Quote?["USD"].percent_change_24h >= 0 ? "text-green-500" : "text-red-500")">
+                        @crypto.Quote?["USD"].percent_change_24h.ToString("F2")%
+                    </td>
+                    <td class="border px-4 py-2">@crypto.Quote?["USD"].market_cap.ToString("C")</td>
+                </tr>
+                
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Loading...</p>
+}
+
+@code {
+
+    private Dictionary<string, Quote> quotes;
+    [Inject]
+    CoinMarketCapService CoinMarketCapService { get; set; }
+    private List<Cryptocurrency>? cryptos;
+
+    protected override async Task OnInitializedAsync()
+    {
+        cryptos = await CoinMarketCapService.GetLatestCryptocurrencyListings();
+    }
+}

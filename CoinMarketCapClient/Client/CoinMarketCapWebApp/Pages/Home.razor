@@ -1,0 +1,92 @@
+﻿@page "/"
+@using CoinMarketCapWebApp.Infrastructure.Services
+@using static CoinMarketCapWebApp.Infrastructure.Models.CryptoApiModels
+@inject CoinMarketCapService CoinMarketCapService
+
+<h1 class="text-center">📊 Kripto Dashboard</h1>
+
+@if (cryptoData == null)
+{
+    <div class="text-center">
+        <p>Yükleniyor...</p>
+    </div>
+}
+else
+{
+    <div class="container mt-4">
+        <h3>📈 En İyi @cryptoData.Count Kripto Para</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Logo</th>
+                    <th>Ad</th>
+                    <th>Sembol</th>
+                    <th>Fiyat (USD)</th>
+                   
+                </tr>
+            </thead>
+            <tbody>
+
+
+
+                @foreach (var crypto in cryptoData)
+                {
+                    if (cryptoIcon.TryGetValue(crypto.Symbol, out var logoUrl)) // Logo URL'yi sembolden al
+                    {
+                        <tr>
+                           
+                            <td><img src="@logoUrl.Logo" width="24" height="24" /></td>
+                            <td>@crypto.Name</td>
+                            <td>@crypto.Symbol</td>
+                            <td>@crypto.PriceUSD.ToString("C")</td>
+                           
+                        </tr>
+                    }
+                    else
+                    {
+                        // Eğer logo bulunamazsa bir hata mesajı veya boş görüntü gösterebilirsiniz
+                        <tr>
+                            <td>Logo Yok</td>
+                            <td>@crypto.Name</td>
+                            <td>@crypto.Symbol</td>
+                            <td>@crypto.PriceUSD.ToString("C")</td>
+                        </tr>
+                    }
+                }
+               
+            </tbody>
+        </table>
+
+        <div class="mt-4">
+            <h4>Diğer Sayfalara Geçiş:</h4>
+            <a href="/crypto-prices" class="btn btn-primary me-2">Kripto Fiyatları</a>
+            <a href="/exchanges" class="btn btn-secondary">Borsa Verileri</a>
+        </div>
+    </div>
+}
+@code {
+    
+    private List<CryptoInfo> cryptoData;
+    private Dictionary<string, CryptoMeta> cryptoIcon;
+
+    protected override async Task OnInitializedAsync()
+    {
+       
+        try
+        {
+
+           
+            // API'den en iyi 5 kripto para listesini al
+            cryptoData = await CoinMarketCapService.GetCryptoListingsAsync(40);
+
+        }
+
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Hata: {ex.Message}");
+        }
+        cryptoIcon = await CoinMarketCapService.GetCryptoLogosAsync(cryptoData.Select(c => c.Symbol).ToArray());
+
+        
+    }
+}
